@@ -25,11 +25,29 @@ dependencies {
     implementation("org.ow2.asm:asm-analysis:9.9.1")
 
     implementation("com.google.code.gson:gson:2.10.1")
-
+    //minecraft
+    //linux
     compileOnly(files("/home/alex/.local/share/PrismLauncher/libraries/com/mojang/minecraft/26.1.1/minecraft-26.1.1-client.jar"))
+    //windows
+    compileOnly(files("C:/Users/Alexresh/AppData/Roaming/PrismLauncher/libraries/com/mojang/minecraft/26.1.1/minecraft-26.1.1-client.jar"))
+
+    //brigadier
+    //linux
     compileOnly(files("/home/alex/.local/share/PrismLauncher/libraries/com/mojang/brigadier/1.3.10/brigadier-1.3.10.jar"))
+    //windows
+    compileOnly(files("C:/Users/Alexresh/AppData/Roaming/PrismLauncher/libraries/com/mojang/brigadier/1.3.10/brigadier-1.3.10.jar"))
+
+    //jspecify
+    //linux
     compileOnly(files("/home/alex/.local/share/PrismLauncher/libraries/org/jspecify/jspecify/1.0.0/jspecify-1.0.0.jar"))
+    //windows
+    compileOnly(files("C:/Users/Alexresh/AppData/Roaming/PrismLauncher/libraries/org/jspecify/jspecify/1.0.0/jspecify-1.0.0.jar"))
+
+    //fastutil
+    //linux
     compileOnly(files("/home/alex/.local/share/PrismLauncher/libraries/it/unimi/dsi/fastutil/8.5.18/fastutil-8.5.18.jar"))
+    //windows
+    compileOnly(files("C:/Users/Alexresh/AppData/Roaming/PrismLauncher/libraries/it/unimi/dsi/fastutil/8.5.18/fastutil-8.5.18.jar"))
 }
 
 tasks.register<Copy>("copyDependencies") {
@@ -38,11 +56,12 @@ tasks.register<Copy>("copyDependencies") {
 }
 
 tasks.register<Copy>("updatePrism") {
-    // Откуда берем свежий файл
     from(layout.buildDirectory.file("libs/SimpleLoader-1.0-SNAPSHOT.jar"))
-    // Куда кладем (путь, который ты нашел)
-    into(File("/home/alex/.local/share/PrismLauncher/libraries/ru/obabok/simpleloader/1/"))
-    // Переименовываем, если Prism ждет имя "simpleloader-1.jar"
+
+    //linux
+    //into(File("/home/alex/.local/share/PrismLauncher/libraries/ru/obabok/simpleloader/1/"))
+    //windows
+    into(File("C:/Users/Alexresh/AppData/Roaming/PrismLauncher/libraries/ru/obabok/simpleloader/1/"))
     rename { "simpleloader-1.jar" }
 }
 

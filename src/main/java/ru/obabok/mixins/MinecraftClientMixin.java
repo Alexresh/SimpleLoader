@@ -16,6 +16,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class MinecraftClientMixin {
     @Inject(at = @At("RETURN"), method = "<init>")
     private void init(GameConfig gameConfig, CallbackInfo ci) {
-        System.out.println("hui");
+        //System.out.println("hui");
     }
 }

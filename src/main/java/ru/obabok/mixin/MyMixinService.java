@@ -53,7 +53,7 @@ public class MyMixinService implements IMixinService {
 
     @Override
     public ILogger getLogger(String s) {
-        return new SimpleLogger();
+        return Main.LOGGER;
     }
 
     @Override public ReEntranceLock getReEntranceLock() { return lock; }

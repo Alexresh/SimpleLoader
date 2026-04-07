@@ -25,12 +25,11 @@ public class TransformingClassLoader extends ClassLoader{
     }
     @Override
     protected Class<?> findClass(String name) throws ClassNotFoundException {
-// 1. Свои системные классы лоадера НЕ ТРОГАЕМ (отдаем Prism)
+
         if (name.startsWith("ru.obabok.")) {
             return getParent().loadClass(name);
         }
 
-        // 2. Исключаем LWJGL (чтобы не сломать нативы)
         if (name.contains("lwjgl")) {
             return super.findClass(name);
         }
@@ -38,46 +37,33 @@ public class TransformingClassLoader extends ClassLoader{
         String classPath = name.replace('.', '/') + ".class";
         byte[] rawBytes = null;
 
-        // 3. АВТОМАТИКА: Ищем байты во ВСЕХ подгруженных JAR (майнкрафт + все моды)
         for (JarFile jar : allJars) {
             JarEntry entry = jar.getJarEntry(classPath);
             if (entry != null) {
                 try (InputStream is = jar.getInputStream(entry)) {
                     rawBytes = is.readAllBytes();
-                    break; // Нашли — выходим из цикла
+                    break;
                 } catch (IOException ignored) {}
             }
         }
 
-        // 4. Если байты найдены в наших JAR-файлах
         if (rawBytes != null) {
             byte[] finalBytes = rawBytes;
 
-            // Если это Майнкрафт — трансформируем (теперь проверка внутри)
             if (name.startsWith("net.minecraft.")) {
                 try {
-                    // Твой хак версии 69->65
-                    int v = rawBytes[7] & 0xFF;
-                    if (v > 65) rawBytes[7] = 65;
-
                     finalBytes = transformer.transformClassBytes(name, name, rawBytes);
-
-                    // Возврат версии 69
-                    if (finalBytes[7] == 65) finalBytes[7] = (byte) v;
-
                     if (rawBytes.length != finalBytes.length) {
-                        System.out.println("!!! КЛАСС " + name + " БЫЛ ИЗМЕНЕН МИКСИНОМ !!!");
+                        Main.LOGGER.debug("[Mixin] Class" + name + " was changed");
                     }
                 } catch (Exception e) {
-                    System.err.println("Ошибка миксина: " + name);
+                    Main.LOGGER.error("[Mixin]: " + name);
                 }
             }
 
-            // Регистрируем класс (будь то игра или любой мод из папки /mods)
             return defineClass(name, finalBytes, 0, finalBytes.length);
         }
 
-        // 5. Если в наших JAR такого нет (библиотеки Prism, JOpt, Netty...) — отдаем Prism
         return super.findClass(name);
     }
 

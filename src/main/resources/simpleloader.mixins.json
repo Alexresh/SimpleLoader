@@ -6,7 +6,8 @@
   "mixins": [
     "MinecraftClientMixin",
     "PlayerListMixin",
-    "PlayerMixin"
+    "PlayerMixin",
+    "TitleScreenMixin"
   ],
   "injectors": {
     "defaultRequire": 1

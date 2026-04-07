@@ -43,22 +43,19 @@ public class BytecodeProvider implements IClassBytecodeProvider {
 
     @Override
     public ClassNode getClassNode(String name, boolean runTransformers) throws IOException {
-        // 1. Сначала ищем в майнкрафте
         String path = name.replace('.', '/') + ".class";
-        JarEntry entry = Main.gameJarFile.getJarEntry(path);
 
-        InputStream is;
-        if (entry != null) {
-            is = Main.gameJarFile.getInputStream(entry);
-        } else {
-            // 2. ЕСЛИ НЕ НАШЛИ (это наш миксин), ищем в ресурсах нашего лоадера
-            is = Main.class.getClassLoader().getResourceAsStream(path);
+        // Пытаемся найти байты через контекстный загрузчик (твой TransformingClassLoader)
+        // Он уже умеет бегать по всем JAR (и игры, и модов)
+        InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(path);
+
+        if (is == null) {
+            return null;
         }
 
-        if (is == null) return null;
-
         try (is) {
-            ClassReader reader = new ClassReader(is.readAllBytes());
+            byte[] bytes = is.readAllBytes();
+            ClassReader reader = new ClassReader(bytes);
             ClassNode node = new ClassNode();
             reader.accept(node, ClassReader.EXPAND_FRAMES);
             return node;

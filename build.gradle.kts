@@ -11,9 +11,6 @@ repositories {
 }
 
 dependencies {
-//    testImplementation(platform("org.junit:junit-bom:5.10.0"))
-//    testImplementation("org.junit.jupiter:junit-jupiter")
-//    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     //если не скачивается
     //implementation("org.spongepowered:mixin:0.8.5")
     //то
@@ -67,4 +64,10 @@ tasks.register<Copy>("updatePrism") {
 
 tasks.named("build") {
     finalizedBy("updatePrism")
+}
+
+tasks.getByName<Jar>("jar") {
+    manifest {
+        attributes["Main-Class"] = "ru.obabok.InstallerEntrypoint"
+    }
 }

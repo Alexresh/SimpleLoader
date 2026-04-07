@@ -13,7 +13,7 @@ import java.util.jar.JarFile;
 
 public class TransformingClassLoader extends ClassLoader{
     //private final Path gameJar;
-    private final IMixinTransformer transformer;
+    private IMixinTransformer transformer;
     //private final JarFile jar;
     private final List<JarFile> allJars = new ArrayList<>();
     public TransformingClassLoader(List<Path> allPaths, ClassLoader classLoader) throws IOException {
@@ -21,6 +21,9 @@ public class TransformingClassLoader extends ClassLoader{
         for (Path path : allPaths) {
             allJars.add(new JarFile(path.toFile()));
         }
+    }
+
+    public void initTransformer(){
         this.transformer = createTransformer();
     }
     @Override
@@ -50,7 +53,7 @@ public class TransformingClassLoader extends ClassLoader{
         if (rawBytes != null) {
             byte[] finalBytes = rawBytes;
 
-            if (name.startsWith("net.minecraft.")) {
+            if (name.startsWith("net.minecraft.") && transformer != null) {
                 try {
                     finalBytes = transformer.transformClassBytes(name, name, rawBytes);
                     if (rawBytes.length != finalBytes.length) {
@@ -142,7 +145,21 @@ public class TransformingClassLoader extends ClassLoader{
         }
     }
 
-//    @Override
+    @Override
+    public InputStream getResourceAsStream(String name) {
+        for (JarFile jarFile : allJars) {
+            JarEntry entry = jarFile.getJarEntry(name);
+            if (entry != null) {
+                try {
+                    return jarFile.getInputStream(entry);
+                } catch (IOException ignored) {}
+            }
+        }
+        // 2. Если не нашли — отдаем родителю
+        return super.getResourceAsStream(name);
+    }
+
+    //    @Override
 //    public Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
 //        synchronized (getClassLoadingLock(name)) {
 //            Class<?> c = findLoadedClass(name);

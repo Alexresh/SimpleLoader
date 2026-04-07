@@ -53,50 +53,54 @@ windows:
 
 ```
 {
-    "formatVersion": 1,
+   "formatVersion": 1,
    "name": "SimpleLoader",
    "uid": "org.multimc.custom.simpleloader",
    "version": "1",
    "mainClass": "ru.obabok.Main",
-   "libraries": [
-   {
-   "name": "ru.obabok:simpleloader:1",
-   "MMC-absoluteUrl": "file://E:/Programs/Repository/Loader/SimpleLoader/build/libs/SimpleLoader-1.0-SNAPSHOT.jar",
-   "localOnly": true
-   },
-   {
-   "name": "org.spongepowered:mixin:0.8.5",
-   "MMC-absoluteUrl": "file://E:/Programs/Repository/Loader/SimpleLoader/libs/mixin-0.8.5.jar",
-   "localOnly": true
-   },
-   {
-   "name": "org.ow2.asm:asm:9.9.1",
-   "MMC-absoluteUrl": "file://E:/Programs/Repository/Loader/SimpleLoader/libs/asm-9.9.1.jar",
-   "localOnly": true
-   },
-   {
-   "name": "org.ow2.asm:asm-tree:9.9.1",
-   "MMC-absoluteUrl": "file://E:/Programs/Repository/Loader/SimpleLoader/libs/asm-tree-9.9.1.jar",
-   "localOnly": true
-   },
-   {
-   "name": "org.ow2.asm:asm-commons:9.9.1",
-   "MMC-absoluteUrl": "file://E:/Programs/Repository/Loader/SimpleLoader/libs/asm-commons-9.9.1.jar",
-   "localOnly": true
-   },
-   {
-   "name": "org.ow2.asm:asm-util:9.9.1",
-   "MMC-absoluteUrl": "file://E:/Programs/Repository/Loader/SimpleLoader/libs/asm-util-9.9.1.jar",
-   "localOnly": true
-   },
-   {
-   "name": "org.ow2.asm:asm-analysis:9.9.1",
-   "MMC-absoluteUrl": "file://E:/Programs/Repository/Loader/SimpleLoader/libs/asm-analysis-9.9.1.jar",
-   "localOnly": true
-   }
+   "libraries":
+   [
+		{
+		   "name": "ru.obabok:simpleloader:1",
+		   "MMC-absoluteUrl": "file:E:/Programs/Repository/Loader/SimpleLoader/build/libs/SimpleLoader-1.0-SNAPSHOT.jar",
+		   "localOnly": true
+		},
+		{
+			"name": "org.spongepowered:mixin:0.8.5",
+			"MMC-absoluteUrl": "file:E:/Programs/Repository/Loader/SimpleLoader/libs/mixin-0.8.5.jar",
+			"localOnly": true
+		},
+		{
+			"name": "org.ow2.asm:asm:9.9.1",
+			"url": "https://repo1.maven.org/maven2"
+		},
+		{
+			"name": "org.ow2.asm:asm-tree:9.9.1",
+			"url": "https://repo1.maven.org/maven2"
+		},
+		{
+			"name": "org.ow2.asm:asm-commons:9.9.1",
+			"url": "https://repo1.maven.org/maven2"
+		},
+		{
+			"name": "org.ow2.asm:asm-util:9.9.1",
+			"url": "https://repo1.maven.org/maven2"
+		},
+		{
+			"name": "org.ow2.asm:asm-analysis:9.9.1",
+			"url": "https://repo1.maven.org/maven2"
+		},
+		{
+			"name": "com.google.guava:guava:32.1.2-jre",
+			"url": "https://maven.org"
+		},
+		{
+			"name": "com.google.code.gson:gson:2.10.1",
+			"url": "https://maven.org"
+		}
    ],
    "order": -10
-   }
 }
+
 
 ```

@@ -102,12 +102,31 @@ public class SimpleLogger implements ILogger {
 
 
     private void print(Level level, String s, Object... objects){
-        if(level == Level.DEBUG && !Main.DEBUG) return;
-        if(level == Level.TRACE && !Main.TRACE) return;
+        if (level == Level.DEBUG && !Main.DEBUG) return;
+        if (level == Level.TRACE && !Main.TRACE) return;
+
         String message = s;
-        for (Object obj : objects) {
-            message = message.replaceFirst("\\{}", String.valueOf(obj));
+        Throwable throwable = null;
+
+        // Проверяем, не является ли последний аргумент исключением
+        if (objects.length > 0 && objects[objects.length - 1] instanceof Throwable) {
+            throwable = (Throwable) objects[objects.length - 1];
         }
-        System.out.println("[" + level + "] " + message);
+
+        // Заменяем скобочки (используем безопасный метод, чтобы не было IndexOutOfBounds)
+        for (Object obj : objects) {
+            if (obj instanceof Throwable) continue; // Не подставляем саму ошибку в текст
+            int pos = message.indexOf("{}");
+            if (pos != -1) {
+                message = message.substring(0, pos) + obj + message.substring(pos + 2);
+            }
+        }
+
+        System.out.println("1[" + level + "] " + message);
+
+        // САМОЕ ВАЖНОЕ: Если ошибка есть — печатаем её стек!
+        if (throwable != null) {
+            throwable.printStackTrace(System.out);
+        }
     }
 }

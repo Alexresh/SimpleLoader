@@ -26,7 +26,7 @@ public class TransformingClassLoader extends ClassLoader{
     @Override
     protected Class<?> findClass(String name) throws ClassNotFoundException {
 
-        if (!(name.startsWith("net.minecraft.") || name.startsWith("com.mojang."))) {
+        if (!(name.startsWith("net.minecraft.") || name.startsWith("com.mojang.") || name.startsWith("ru.test."))) {
             return super.findClass(name);
         }
 

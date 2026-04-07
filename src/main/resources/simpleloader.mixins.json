@@ -4,7 +4,9 @@
   "package": "ru.obabok.mixins",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "MinecraftClientMixin"
+    "MinecraftClientMixin",
+    "PlayerListMixin",
+    "PlayerMixin"
   ],
   "injectors": {
     "defaultRequire": 1

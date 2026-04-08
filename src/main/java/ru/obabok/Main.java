@@ -27,20 +27,32 @@ import java.util.stream.Collectors;
 public class Main {
     public static JarFile gameJarFile;
     public static boolean TRACE = false;
-    public static boolean DEBUG = true;
+    public static boolean DEBUG = false;
     public static boolean MIXIN_EXPORT = false;
 
     public static final SimpleLogger LOGGER = new SimpleLogger();
 
-    public static final String PrismLocation =
-            System.getProperty("os.name").toLowerCase().contains("win") ?
-                    "C:/Users/Alexresh/AppData/Roaming/PrismLauncher/libraries/" :
-                    "/home/alex/.local/share/PrismLauncher/libraries/";
 
     public static void main(String[] args) {
         try {
             System.setOut(new PrintStream(System.out, true, StandardCharsets.UTF_8));
         } catch (Exception ignored) {}
+
+        File mcJarFile = null;
+        try {
+            // Берем любой базовый класс ванильного майнкрафта
+            mcJarFile = new File(Class.forName("net.minecraft.client.main.Main")
+                    .getProtectionDomain()
+                    .getCodeSource()
+                    .getLocation()
+                    .toURI());
+
+            String mcPath = mcJarFile.getAbsolutePath();
+            LOGGER.debug("Майнкрафт найден тут: " + mcPath);
+        } catch (Exception e) {
+            LOGGER.error("Не удалось определить путь к Minecraft JAR", e);
+        }
+
 
         if(args.length == 0){
             Installer.run();
@@ -54,8 +66,8 @@ public class Main {
             // 1. Подготовка путей
 
             LOGGER.debug("paths");
-
-            Path mcPath = Paths.get(PrismLocation + "com/mojang/minecraft/26.1.1/minecraft-26.1.1-client.jar");
+            if(mcJarFile == null) return;
+            Path mcPath = Paths.get(mcJarFile.toURI());
             gameJarFile = new JarFile(mcPath.toFile());
 
             String cp = System.getProperty("java.class.path");

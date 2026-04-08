@@ -1,0 +1,31 @@
+{
+    "components": [
+        {
+            "cachedName": "LWJGL 3",
+            "cachedVersion": "3.4.1",
+            "cachedVolatile": true,
+            "dependencyOnly": true,
+            "uid": "org.lwjgl3",
+            "version": "3.4.1"
+        },
+        {
+            "cachedName": "Minecraft",
+            "cachedRequires": [
+                {
+                    "suggests": "3.4.1",
+                    "uid": "org.lwjgl3"
+                }
+            ],
+            "cachedVersion": "26.1.1",
+            "important": true,
+            "uid": "net.minecraft",
+            "version": "26.1.1"
+        },
+        {
+            "cachedName": "SimpleLoader",
+            "cachedVersion": "1",
+            "uid": "org.multimc.custom.simpleloader"
+        }
+    ],
+    "formatVersion": 1
+}

@@ -3,7 +3,7 @@ plugins {
 }
 
 group = "ru.obabok"
-version = "1.0-SNAPSHOT"
+version = "1.0"
 
 repositories {
     mavenCentral()
@@ -46,7 +46,7 @@ tasks.register<Copy>("copyDependencies") {
 }
 
 tasks.register<Copy>("updatePrism") {
-    from(layout.buildDirectory.file("libs/SimpleLoader-1.0-SNAPSHOT.jar"))
+    from(layout.buildDirectory.file("libs/SimpleLoader-1.0.jar"))
     into("$prismLibDir/ru/obabok/simpleloader/1/")
     rename { "simpleloader-1.jar" }
 }

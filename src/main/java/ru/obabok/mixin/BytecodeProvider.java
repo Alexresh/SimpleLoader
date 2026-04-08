@@ -11,42 +11,17 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 public class BytecodeProvider implements IClassBytecodeProvider {
-    private final JarFile jar;
-
-    public BytecodeProvider(JarFile jar) {
-        this.jar = jar;
-    }
+    private static IClassBytecodeProvider instance;
 
     @Override
     public ClassNode getClassNode(String name) throws ClassNotFoundException, IOException {
         return getClassNode(name, true);
     }
 
-//    @Override
-//    public ClassNode getClassNode(String name, boolean b) throws ClassNotFoundException, IOException {
-//        String path = name.replace('.', '/') + ".class";
-//        JarEntry entry = jar.getJarEntry(path);
-//
-//        if (entry == null) {
-//            throw new ClassNotFoundException(name);
-//        }
-//
-//        try (InputStream is = jar.getInputStream(entry)) {
-//            byte[] bytes = is.readAllBytes();
-//            ClassReader reader = new ClassReader(bytes);
-//            ClassNode node = new ClassNode();
-//            // Превращаем байты в объектную модель (Node) для Mixin
-//            reader.accept(node, ClassReader.EXPAND_FRAMES);
-//            return node;
-//        }
-//    }
-
     @Override
     public ClassNode getClassNode(String name, boolean runTransformers) throws IOException {
         String path = name.replace('.', '/') + ".class";
 
-        // Пытаемся найти байты через контекстный загрузчик (твой TransformingClassLoader)
-        // Он уже умеет бегать по всем JAR (и игры, и модов)
         InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(path);
 
         if (is == null) {
@@ -60,6 +35,12 @@ public class BytecodeProvider implements IClassBytecodeProvider {
             reader.accept(node, ClassReader.EXPAND_FRAMES);
             return node;
         }
+    }
+    public static IClassBytecodeProvider getInstance(){
+        if(instance == null){
+            instance = new BytecodeProvider();
+        }
+        return instance;
     }
 
 }

@@ -1,0 +1,48 @@
+{
+   "formatVersion": 1,
+   "name": "SimpleLoader",
+   "uid": "org.multimc.custom.simpleloader",
+   "version": "1",
+   "mainClass": "ru.obabok.Main",
+   "libraries":
+   [
+		{
+			"name": "ru.obabok:simpleloader:1",
+			"MMC-absoluteUrl": "file:libraries/ru/obabok/simpleloader/1/simpleloader-1.jar",
+			"localOnly": true
+		},
+		{
+			"name": "org.spongepowered:mixin:0.8.5",
+			"url": "https://repo.spongepowered.org/repository/maven-releases"
+		},
+		{
+			"name": "org.ow2.asm:asm:9.9.1",
+			"url": "https://repo1.maven.org/maven2"
+		},
+		{
+			"name": "org.ow2.asm:asm-tree:9.9.1",
+			"url": "https://repo1.maven.org/maven2"
+		},
+		{
+			"name": "org.ow2.asm:asm-commons:9.9.1",
+			"url": "https://repo1.maven.org/maven2"
+		},
+		{
+			"name": "org.ow2.asm:asm-util:9.9.1",
+			"url": "https://repo1.maven.org/maven2"
+		},
+		{
+			"name": "org.ow2.asm:asm-analysis:9.9.1",
+			"url": "https://repo1.maven.org/maven2"
+		},
+		{
+			"name": "com.google.guava:guava:32.1.2-jre",
+			"url": "https://maven.org"
+		},
+		{
+			"name": "com.google.code.gson:gson:2.10.1",
+			"url": "https://maven.org"
+		}
+   ],
+   "order": -10
+}

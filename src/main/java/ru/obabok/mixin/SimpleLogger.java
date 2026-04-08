@@ -122,7 +122,7 @@ public class SimpleLogger implements ILogger {
             }
         }
 
-        System.out.println("1[" + level + "] " + message);
+        System.out.println("[" + level + "] " + message);
 
         // САМОЕ ВАЖНОЕ: Если ошибка есть — печатаем её стек!
         if (throwable != null) {

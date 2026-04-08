@@ -27,10 +27,15 @@ import java.util.stream.Collectors;
 public class Main {
     public static JarFile gameJarFile;
     public static boolean TRACE = false;
-    public static boolean DEBUG = false;
+    public static boolean DEBUG = true;
     public static boolean MIXIN_EXPORT = false;
 
     public static final SimpleLogger LOGGER = new SimpleLogger();
+
+    public static final String PrismLocation =
+            System.getProperty("os.name").toLowerCase().contains("win") ?
+                    "C:/Users/Alexresh/AppData/Roaming/PrismLauncher/libraries/" :
+                    "/home/alex/.local/share/PrismLauncher/libraries/";
 
     public static void main(String[] args) {
         try {
@@ -50,7 +55,7 @@ public class Main {
 
             LOGGER.debug("paths");
 
-            Path mcPath = Paths.get("C:/Users/Alexresh/AppData/Roaming/PrismLauncher/libraries/com/mojang/minecraft/26.1.1/minecraft-26.1.1-client.jar");
+            Path mcPath = Paths.get(PrismLocation + "com/mojang/minecraft/26.1.1/minecraft-26.1.1-client.jar");
             gameJarFile = new JarFile(mcPath.toFile());
 
             String cp = System.getProperty("java.class.path");

@@ -1,12 +1,10 @@
-package ru.obabok;
+package ru.obabok.utils;
 
-import org.spongepowered.asm.launch.MixinTransformationService;
-import org.spongepowered.asm.mixin.transformer.IMixinTransformer;
-import org.spongepowered.asm.service.modlauncher.MixinTransformationHandler;
+import ru.obabok.Main;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
+import java.lang.reflect.Method;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +12,7 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 public class TransformingClassLoader extends ClassLoader{
-    private IMixinTransformer transformer;
+    private Object transformer;
 
     private final List<JarFile> allJars = new ArrayList<>();
     public TransformingClassLoader(List<Path> allPaths, ClassLoader classLoader) throws IOException {
@@ -30,9 +28,9 @@ public class TransformingClassLoader extends ClassLoader{
     @Override
     protected Class<?> findClass(String name) throws ClassNotFoundException {
 
-        if (name.startsWith("ru.obabok.")) {
-            return getParent().loadClass(name);
-        }
+//        if (name.startsWith("ru.obabok.")) {
+//            return getParent().loadClass(name);
+//        }
 
         if (name.contains("lwjgl")) {
             return super.findClass(name);
@@ -56,12 +54,14 @@ public class TransformingClassLoader extends ClassLoader{
 
             if (name.startsWith("net.minecraft.") && transformer != null) {
                 try {
-                    finalBytes = transformer.transformClassBytes(name, name, rawBytes);
+                    Method transformMethod = transformer.getClass().getMethod("transformClassBytes", String.class, String.class, byte[].class);
+                    transformMethod.setAccessible(true);
+                    finalBytes = (byte[]) transformMethod.invoke(transformer, name, name, rawBytes);
                     if (rawBytes.length != finalBytes.length) {
                         Main.LOGGER.debug("[Mixin] Class" + name + " was changed");
                     }
                 } catch (Exception e) {
-                    Main.LOGGER.error("[Mixin]: " + name);
+                    Main.LOGGER.error("[Mixin]: " + name, e.fillInStackTrace());
                 }
             }
 
@@ -71,12 +71,12 @@ public class TransformingClassLoader extends ClassLoader{
         return super.findClass(name);
     }
 
-    private IMixinTransformer createTransformer() {
+    private Object createTransformer() {
         try {
             Class<?> transformerClass = Class.forName("org.spongepowered.asm.mixin.transformer.MixinTransformer");
             java.lang.reflect.Constructor<?> constructor = transformerClass.getDeclaredConstructor();
             constructor.setAccessible(true);
-            return (IMixinTransformer) constructor.newInstance();
+            return constructor.newInstance();
         } catch (Exception e) {
             throw new RuntimeException("Не удалось создать Mixin Transformer", e);
         }
@@ -85,28 +85,35 @@ public class TransformingClassLoader extends ClassLoader{
     @Override
     public Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
         synchronized (getClassLoadingLock(name)) {
+            // 1. Проверяем, не загружен ли уже
             Class<?> c = findLoadedClass(name);
-            if (c == null) {
-                // МЫ ГРУЗИМ ТОЛЬКО ЭТО:
-                if (name.startsWith("net.minecraft.") || name.startsWith("com.mojang.")) {
-                    // Но исключаем LWJGL внутри com.mojang, если он там есть
-                    if (!name.contains("lwjgl")) {
-                        try {
-                            c = findClass(name);
-                        } catch (ClassNotFoundException ignored) {}
-                    }
+            if (c != null) return c;
+
+            if (name.startsWith("ru.obabok.event.") || name.equals("ru.obabok.utils.Loader")) {
+                c = findClass(name);
+                if (resolve) resolveClass(c);
+                return c; // Сразу возвращаем, не даем super.loadClass сработать
+            }
+
+            // 2. Специфичные системные исключения (ВСЕГДА РОДИТЕЛЬ)
+            if (name.startsWith("java.") || name.startsWith("javax.") ||
+                    name.startsWith("org.spongepowered.") || name.startsWith("org.objectweb.asm.") ||
+                    name.contains("lwjgl")) {
+                return getParent().loadClass(name);
+            }
+
+            // 3. ТВОИ КЛАССЫ И МАЙНКРАФТ (ВСЕГДА САМИ)
+            if (name.startsWith("ru.obabok.") || name.startsWith("net.minecraft.") || name.startsWith("com.mojang.")) {
+                // Исключаем сам лоадер, чтобы не было StackOverflow
+                if (!name.equals("ru.obabok.utils.TransformingClassLoader")) {
+                    c = findClass(name);
+                    if (resolve) resolveClass(c);
+                    return c; // ВОЗВРАЩАЕМ СРАЗУ, не идем в super!
                 }
             }
 
-            // ВСЁ ОСТАЛЬНОЕ (JOpt, LWJGL, Netty, Authlib, лоадер) — отдаем Prism (родителю)
-            if (c == null) {
-                // ВАЖНО: используем системный лоадер Prism, а не Platform
-                // Для этого в Main при создании лоадера передавай Main.class.getClassLoader()
-                c = super.loadClass(name, resolve);
-            }
-
-            if (resolve) resolveClass(c);
-            return c;
+            // 4. Всё остальное (библиотеки) — родителю
+            return super.loadClass(name, resolve);
         }
     }
 
@@ -123,28 +130,5 @@ public class TransformingClassLoader extends ClassLoader{
         // 2. Если не нашли — отдаем родителю
         return super.getResourceAsStream(name);
     }
-
-    //    @Override
-//    public Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
-//        synchronized (getClassLoadingLock(name)) {
-//            Class<?> c = findLoadedClass(name);
-//            if (c == null) {
-//                // Если это Майнкрафт или его внутренние библиотеки Моджанг — грузим сами
-//                if (name.startsWith("net.minecraft.") || name.startsWith("com.mojang.")) {
-//                    try {
-//                        c = findClass(name);
-//                    } catch (ClassNotFoundException ignored) {}
-//                }
-//            }
-//
-//            // ВСЁ ОСТАЛЬНОЕ (LWJGL, системные библиотеки, лоадер) — отдаем Prism (родителю)
-//            if (c == null) {
-//                c = super.loadClass(name, resolve);
-//            }
-//
-//            if (resolve) resolveClass(c);
-//            return c;
-//        }
-//    }
 
 }

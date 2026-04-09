@@ -7,7 +7,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import ru.obabok.Main;
 import ru.obabok.event.EventManager;
 
 @Mixin(Gui.class)
@@ -19,6 +18,5 @@ public abstract class GuiMixin {
 
         // Вызываем наш инвокер
         EventManager.HUD_RENDER.invoker().onRender(graphics, deltaTracker);
-        Main.print("AAAAAAAAAAAAAAAA");
     }
 }

@@ -1,6 +1,8 @@
 package ru.obabok;
 
+import org.spongepowered.asm.launch.MixinTransformationService;
 import org.spongepowered.asm.mixin.transformer.IMixinTransformer;
+import org.spongepowered.asm.service.modlauncher.MixinTransformationHandler;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,9 +14,8 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 public class TransformingClassLoader extends ClassLoader{
-    //private final Path gameJar;
     private IMixinTransformer transformer;
-    //private final JarFile jar;
+
     private final List<JarFile> allJars = new ArrayList<>();
     public TransformingClassLoader(List<Path> allPaths, ClassLoader classLoader) throws IOException {
         super(classLoader);
@@ -70,44 +71,8 @@ public class TransformingClassLoader extends ClassLoader{
         return super.findClass(name);
     }
 
-//    @Override
-//    protected Class<?> findClass(String name) throws ClassNotFoundException {
-//        // Превращаем имя класса (net.minecraft.Main) в путь (net/minecraft/Main.class)
-//        if (name.startsWith("ru.obabok.")) {
-//            return getParent().loadClass(name);
-//        }
-////        if (name.startsWith("com.mojang.")) {
-////            // Просто просим родителя, НО только если мы еще не загрузили этот класс сами
-////            return getParent().loadClass(name);
-////        }
-//        if (name.startsWith("net.minecraft.")) {
-//            String classPath = name.replace('.', '/') + ".class";
-//            JarEntry entry = jar.getJarEntry(classPath);
-//            System.out.println("Test: " + classPath);
-//            if (entry != null) {
-//                try (InputStream is = jar.getInputStream(entry)) {
-//                    // 1. Читаем "сырые" байты из JAR
-//                    byte[] rawBytes = is.readAllBytes();
-//
-//                    System.out.println("Попытка трансформировать: " + name);
-//                    byte[] transformedBytes = transformer.transformClassBytes(name, name, rawBytes);
-//                    if (rawBytes.length != transformedBytes.length) {
-//                        System.out.println("!!! КЛАСС " + name + " БЫЛ ИЗМЕНЕН МИКСИНОМ !!!");
-//                    }
-//                    // 3. Регистрируем класс в JVM
-//                    return defineClass(name, transformedBytes, 0, transformedBytes.length);
-//                } catch (Exception e) {
-//                    throw new ClassNotFoundException("Ошибка трансформации класса " + name, e);
-//                }
-//            }
-//        }
-//
-//        // Если класса нет в JAR игры (например, это библиотеки), ищем в родителе
-//        return super.findClass(name);
-//    }
     private IMixinTransformer createTransformer() {
         try {
-            // В версии 0.8.5 трансформер создается через внутренний билд
             Class<?> transformerClass = Class.forName("org.spongepowered.asm.mixin.transformer.MixinTransformer");
             java.lang.reflect.Constructor<?> constructor = transformerClass.getDeclaredConstructor();
             constructor.setAccessible(true);

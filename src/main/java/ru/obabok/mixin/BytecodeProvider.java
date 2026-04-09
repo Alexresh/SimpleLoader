@@ -3,12 +3,9 @@ package ru.obabok.mixin;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.service.IClassBytecodeProvider;
-import ru.obabok.Main;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
 
 public class BytecodeProvider implements IClassBytecodeProvider {
     private static IClassBytecodeProvider instance;
@@ -36,11 +33,6 @@ public class BytecodeProvider implements IClassBytecodeProvider {
             return node;
         }
     }
-
-//    @Override
-//    public ClassNode getClassNode(String s, boolean b, int i) throws ClassNotFoundException, IOException {
-//        return getClassNode(s,b);
-//    }
 
     public static IClassBytecodeProvider getInstance(){
         if(instance == null){

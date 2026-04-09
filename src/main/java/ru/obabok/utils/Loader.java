@@ -10,7 +10,6 @@ import ru.obabok.TransformingClassLoader;
 
 import java.io.File;
 import java.io.InputStreamReader;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -97,22 +96,8 @@ public class Loader {
         LOGGER.debug("[Loader] initMixins");
         System.setProperty("mixin.service", "ru.obabok.mixin.MyMixinService");
         if (MIXIN_EXPORT) System.setProperty("mixin.debug.export", "true");
-        try{
-            Class<?> bootstrap = Class.forName("org.spongepowered.asm.launch.MixinBootstrap", true, loader);
-            bootstrap.getMethod("init").invoke(null);
-            Class<?> envClass = Class.forName("org.spongepowered.asm.mixin.MixinEnvironment", true, loader);
-            Object defaultEnv = envClass.getMethod("getDefaultEnvironment").invoke(null);
-            Class<?> sideEnum = Class.forName("org.spongepowered.asm.mixin.MixinEnvironment$Side", true, loader);
-            defaultEnv.getClass().getMethod("setSide", sideEnum).invoke(defaultEnv, Enum.valueOf((Class<Enum>)sideEnum, "CLIENT"));
-        }catch (Exception e){
-            LOGGER.error("[Loader] Failed to init Mixins in custom classloader: " + e.getMessage());
-        }
-
-
-        // Находим Side через рефлексию
-
-        //MixinBootstrap.init();
-        //MixinEnvironment.getDefaultEnvironment().setSide(MixinEnvironment.Side.CLIENT);
+        MixinBootstrap.init();
+        MixinEnvironment.getDefaultEnvironment().setSide(MixinEnvironment.Side.CLIENT);
     }
     private static void registerMixins(File[] modFiles){
         LOGGER.debug("[Loader] registerMixins");

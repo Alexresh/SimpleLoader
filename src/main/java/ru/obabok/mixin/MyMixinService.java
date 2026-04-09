@@ -97,20 +97,11 @@ public class MyMixinService implements IMixinService {
     }
 
     private final IContainerHandle primaryContainer = new IContainerHandle() {
-//        @Override
-//        public String getId() {
-//            return "simple_loader_container";
-//        }
-//
-//        @Override
-//        public String getDescription() {
-//            return "";
-//        }
-
         @Override
         public Collection<IContainerHandle> getNestedContainers() {
             return Collections.emptyList(); // Ключевой момент: возвращаем пустой список вместо null
         }
+
         @Override
         public String getAttribute(String name) { return null; }
     };

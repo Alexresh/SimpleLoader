@@ -9,7 +9,7 @@ import java.io.File;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 
-public class Main {
+public class Launcher {
     public static boolean TRACE = false;
     public static boolean DEBUG = true;
     public static boolean MIXIN_EXPORT = false;

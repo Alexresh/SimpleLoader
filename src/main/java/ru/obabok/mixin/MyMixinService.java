@@ -2,14 +2,12 @@ package ru.obabok.mixin;
 
 import org.spongepowered.asm.launch.platform.container.IContainerHandle;
 import org.spongepowered.asm.logging.ILogger;
-import org.spongepowered.asm.logging.Level;
 import org.spongepowered.asm.mixin.MixinEnvironment;
 import org.spongepowered.asm.service.*;
 import org.spongepowered.asm.util.ReEntranceLock;
-import ru.obabok.Main;
+import ru.obabok.Launcher;
 
 import java.io.InputStream;
-import java.net.URL;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -53,7 +51,7 @@ public class MyMixinService implements IMixinService {
 
     @Override
     public ILogger getLogger(String s) {
-        return Main.LOGGER;
+        return Launcher.LOGGER;
     }
 
     @Override public ReEntranceLock getReEntranceLock() { return lock; }

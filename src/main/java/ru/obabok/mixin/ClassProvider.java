@@ -1,7 +1,7 @@
 package ru.obabok.mixin;
 
 import org.spongepowered.asm.service.IClassProvider;
-import ru.obabok.Main;
+import ru.obabok.Launcher;
 
 import java.net.URL;
 
@@ -19,12 +19,12 @@ public class ClassProvider implements IClassProvider {
 
     @Override
     public Class<?> findClass(String name, boolean initialize) throws ClassNotFoundException {
-        return Class.forName(name, initialize, Main.class.getClassLoader());
+        return Class.forName(name, initialize, Launcher.class.getClassLoader());
     }
 
     @Override
     public Class<?> findAgentClass(String name, boolean initialize) throws ClassNotFoundException {
-        return Class.forName(name, initialize, Main.class.getClassLoader());
+        return Class.forName(name, initialize, Launcher.class.getClassLoader());
     }
 
     public static IClassProvider getInstance(){

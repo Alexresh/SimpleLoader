@@ -3,7 +3,7 @@
    "name": "SimpleLoader",
    "uid": "org.multimc.custom.simpleloader",
    "version": "1",
-   "mainClass": "ru.obabok.Main",
+   "mainClass": "ru.obabok.Launcher",
    "libraries":
    [
 		{

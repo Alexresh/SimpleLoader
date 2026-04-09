@@ -1,6 +1,6 @@
 package ru.obabok.utils;
 
-import ru.obabok.Main;
+import ru.obabok.Launcher;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -58,10 +58,10 @@ public class TransformingClassLoader extends ClassLoader{
                     transformMethod.setAccessible(true);
                     finalBytes = (byte[]) transformMethod.invoke(transformer, name, name, rawBytes);
                     if (rawBytes.length != finalBytes.length) {
-                        Main.LOGGER.debug("[Mixin] Class" + name + " was changed");
+                        Launcher.LOGGER.debug("[Mixin] Class" + name + " was changed");
                     }
                 } catch (Exception e) {
-                    Main.LOGGER.error("[Mixin]: " + name, e.fillInStackTrace());
+                    Launcher.LOGGER.error("[Mixin]: " + name, e.fillInStackTrace());
                 }
             }
 

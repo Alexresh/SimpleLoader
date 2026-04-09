@@ -2,7 +2,7 @@ package ru.obabok.utils.logger;
 
 import org.spongepowered.asm.logging.ILogger;
 import org.spongepowered.asm.logging.Level;
-import ru.obabok.Main;
+import ru.obabok.Launcher;
 
 public class SimpleLogger implements ILogger {
     @Override
@@ -102,8 +102,8 @@ public class SimpleLogger implements ILogger {
 
 
     public void print(Level level, String s, Object... objects){
-        if (level == Level.DEBUG && !Main.DEBUG) return;
-        if (level == Level.TRACE && !Main.TRACE) return;
+        if (level == Level.DEBUG && !Launcher.DEBUG) return;
+        if (level == Level.TRACE && !Launcher.TRACE) return;
 
         String message = s;
         Throwable throwable = null;

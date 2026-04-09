@@ -1,6 +1,6 @@
 package ru.obabok.utils;
 
-import ru.obabok.Main;
+import ru.obabok.Launcher;
 
 import javax.swing.*;
 import java.io.File;
@@ -41,7 +41,7 @@ public class Installer {
 
         try {
 
-            Path selfPath = Paths.get(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+            Path selfPath = Paths.get(Launcher.class.getProtectionDomain().getCodeSource().getLocation().toURI());
             Path libPath = prismDir.toPath().resolve("libraries/ru/obabok/simpleloader/1/simpleloader-1.jar");
 
             Files.createDirectories(libPath.getParent());
@@ -72,7 +72,7 @@ public class Installer {
     }
 
     private static void copyFromResources(String resourcePath, Path targetPath) throws Exception {
-        try (InputStream in = Main.class.getResourceAsStream(resourcePath)) {
+        try (InputStream in = Launcher.class.getResourceAsStream(resourcePath)) {
             if (in == null) {
                 throw new RuntimeException("File not found: " + resourcePath);
             }

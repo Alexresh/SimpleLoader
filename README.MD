@@ -8,7 +8,7 @@ linux:
    "name": "SimpleLoader",
    "uid": "org.multimc.custom.simpleloader",
    "version": "1",
-   "mainClass": "ru.obabok.Main",
+   "mainClass": "ru.obabok.Launcher",
    "libraries": [
    {
    "name": "ru.obabok:simpleloader:1",
@@ -57,7 +57,7 @@ windows:
    "name": "SimpleLoader",
    "uid": "org.multimc.custom.simpleloader",
    "version": "1",
-   "mainClass": "ru.obabok.Main",
+   "mainClass": "ru.obabok.Launcher",
    "libraries":
    [
 		{

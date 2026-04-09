@@ -2,7 +2,7 @@ package ru.obabok.utils;
 
 import java.io.File;
 
-import static ru.obabok.Main.LOGGER;
+import static ru.obabok.Launcher.LOGGER;
 
 public class FileUtils {
     private static FileUtils instance;

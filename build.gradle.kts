@@ -45,6 +45,7 @@ dependencies {
     compileOnly(prismLib("com/mojang/brigadier/1.3.10/brigadier-1.3.10.jar"))
     compileOnly(prismLib("org/jspecify/jspecify/1.0.0/jspecify-1.0.0.jar"))
     compileOnly(prismLib("it/unimi/dsi/fastutil/8.5.18/fastutil-8.5.18.jar"))
+    compileOnly(prismLib("com/mojang/datafixerupper/9.0.19/datafixerupper-9.0.19.jar"))
 }
 
 tasks.register<Copy>("copyDependencies") {

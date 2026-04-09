@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.jar.JarFile;
 
-import static ru.obabok.Main.LOGGER;
+import static ru.obabok.Launcher.LOGGER;
 
 public class Bootstrap {
     public static JarFile gameJarFile;
@@ -23,7 +23,7 @@ public class Bootstrap {
             TransformingClassLoader loader = new TransformingClassLoader(allJars, Bootstrap.class.getClassLoader());
             Thread.currentThread().setContextClassLoader(loader);
 
-            Class<?> internalLoaderClass = Class.forName("ru.obabok.utils.Loader", true, loader);
+            Class<?> internalLoaderClass = Class.forName("ru.obabok.utils.LoaderCore", true, loader);
             internalLoaderClass.getMethod("init", String[].class, TransformingClassLoader.class, File[].class)
                     .invoke(null, (Object) args, loader, modFiles);
 

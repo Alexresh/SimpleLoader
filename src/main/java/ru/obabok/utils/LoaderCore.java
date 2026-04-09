@@ -11,15 +11,15 @@ import java.lang.reflect.Method;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
-import static ru.obabok.Main.LOGGER;
-import static ru.obabok.Main.MIXIN_EXPORT;
+import static ru.obabok.Launcher.LOGGER;
+import static ru.obabok.Launcher.MIXIN_EXPORT;
 
-public class Loader {
+public class LoaderCore {
 
     //reflect invoke from bootstrap do not delete
     public static void init(String[] args, TransformingClassLoader loader, File[] modFiles){
 
-        LOGGER.info("Load SimpleLoader by Obabok");
+        LOGGER.info("[LoaderCore] Load SimpleLoader by Obabok");
 
         initMixins();
 
@@ -34,18 +34,18 @@ public class Loader {
     }
 
     private static void initMixins(){
-        LOGGER.debug("[Loader] initMixins");
+        LOGGER.debug("[LoaderCore] initMixins");
         System.setProperty("mixin.service", "ru.obabok.mixin.MyMixinService");
         if (MIXIN_EXPORT) System.setProperty("mixin.debug.export", "true");
         MixinBootstrap.init();
         MixinEnvironment.getDefaultEnvironment().setSide(MixinEnvironment.Side.CLIENT);
     }
     private static void registerMixins(File[] modFiles){
-        LOGGER.debug("[Loader] registerMixins");
+        LOGGER.debug("[LoaderCore] registerMixins");
         Mixins.addConfiguration("simpleloader.mixins.json");
-        LOGGER.debug("[Loader] added loader mixins");
+        LOGGER.debug("[LoaderCore] added loader mixins");
 
-        LOGGER.debug("[Loader] mixin mods");
+        LOGGER.debug("[LoaderCore] mixin mods");
         if (modFiles != null) {
             for (File modFile : modFiles) {
                 try (JarFile jar = new JarFile(modFile)) {
@@ -55,15 +55,15 @@ public class Loader {
                         if (json.has("mixins")) {
                             String mixinConfig = json.get("mixins").getAsString();
                             Mixins.addConfiguration(mixinConfig);
-                            LOGGER.debug("[Loader] Registered mixins for mod " + modFile.getName() + ": " + mixinConfig);
+                            LOGGER.debug("[LoaderCore] Registered mixins for mod " + modFile.getName() + ": " + mixinConfig);
                         }
                     }
                 } catch (Exception e) {
-                    LOGGER.error("[Loader] registerMixins: " + modFile.getName() + " " + e.getMessage(), e.fillInStackTrace());
+                    LOGGER.error("[LoaderCore] registerMixins: " + modFile.getName() + " " + e.getMessage(), e.fillInStackTrace());
                 }
             }
         }
-        LOGGER.debug("[Loader] Mixin system fully loaded!");
+        LOGGER.debug("[LoaderCore] Mixin system fully loaded!");
     }
 
     private static void invokeMods(File[] modFiles, TransformingClassLoader loader){
@@ -81,9 +81,9 @@ public class Loader {
                     initMethod.setAccessible(true);
                     initMethod.invoke(null);
 
-                    LOGGER.debug("[Loader] Mod " + modFile.getName() + " initialized");
+                    LOGGER.debug("[LoaderCore] Mod " + modFile.getName() + " initialized");
                 } catch (Exception e) {
-                    LOGGER.error("[Loader] invokeMods: " + modFile.getName() + " " + e.getMessage(), e.fillInStackTrace());
+                    LOGGER.error("[LoaderCore] invokeMods: " + modFile.getName() + " " + e.getMessage(), e.fillInStackTrace());
                 }
             }
         }
@@ -93,9 +93,9 @@ public class Loader {
             Class<?> mcMain = Class.forName("net.minecraft.client.main.Main", true, loader);
             Method mainMethod = mcMain.getMethod("main", String[].class);
             mainMethod.invoke(null, (Object) args);
-            LOGGER.debug("[Loader] Minecraft started");
+            LOGGER.debug("[LoaderCore] Minecraft started");
         }catch (Exception e){
-            LOGGER.error("[Loader] invokeMinecraft: " + e.getMessage(), e.fillInStackTrace());
+            LOGGER.error("[LoaderCore] invokeMinecraft: " + e.getMessage(), e.fillInStackTrace());
         }
     }
 

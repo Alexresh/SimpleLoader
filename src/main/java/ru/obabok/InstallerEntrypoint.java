@@ -7,7 +7,7 @@ public class InstallerEntrypoint {
         if (args.length == 0) {
             Installer.run();
         } else {
-            Main.main(args);
+            Launcher.main(args);
         }
     }
 }

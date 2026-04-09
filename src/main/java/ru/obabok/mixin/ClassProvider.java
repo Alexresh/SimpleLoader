@@ -34,3 +34,4 @@ public class ClassProvider implements IClassProvider {
         return instance;
     }
 }
+

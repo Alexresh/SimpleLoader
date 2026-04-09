@@ -5,7 +5,7 @@ import ru.obabok.utils.Installer;
 public class InstallerEntrypoint {
     public static void main(String[] args) {
         if (args.length == 0) {
-            Installer.run(); // Запускаем твой код установки
+            Installer.run();
         } else {
             Main.main(args);
         }

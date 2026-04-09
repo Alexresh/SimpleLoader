@@ -36,6 +36,12 @@ public class BytecodeProvider implements IClassBytecodeProvider {
             return node;
         }
     }
+
+//    @Override
+//    public ClassNode getClassNode(String s, boolean b, int i) throws ClassNotFoundException, IOException {
+//        return getClassNode(s,b);
+//    }
+
     public static IClassBytecodeProvider getInstance(){
         if(instance == null){
             instance = new BytecodeProvider();

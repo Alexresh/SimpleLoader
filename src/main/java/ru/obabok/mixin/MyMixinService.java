@@ -88,8 +88,8 @@ public class MyMixinService implements IMixinService {
 
     @Override
     public IClassProvider getClassProvider() {
-        //return ClassProvider.getInstance(); wtf
-        return null;
+        return ClassProvider.getInstance(); //wtf
+        //return null;
     }
     @Override
     public IClassBytecodeProvider getBytecodeProvider(){
@@ -97,6 +97,16 @@ public class MyMixinService implements IMixinService {
     }
 
     private final IContainerHandle primaryContainer = new IContainerHandle() {
+//        @Override
+//        public String getId() {
+//            return "simple_loader_container";
+//        }
+//
+//        @Override
+//        public String getDescription() {
+//            return "";
+//        }
+
         @Override
         public Collection<IContainerHandle> getNestedContainers() {
             return Collections.emptyList(); // Ключевой момент: возвращаем пустой список вместо null

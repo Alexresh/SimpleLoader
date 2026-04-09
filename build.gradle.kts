@@ -31,6 +31,16 @@ dependencies {
     implementation("org.ow2.asm:asm-analysis:9.9.1")
     implementation("com.google.code.gson:gson:2.10.1")
 
+    //val log4jVersion = "2.25.2"
+
+    // API и Core для создания своего Appender
+    //compileOnly("org.apache.logging.log4j:log4j-api:$log4jVersion")
+    //compileOnly("org.apache.logging.log4j:log4j-core:$log4jVersion")
+
+    // Мост для SLF4J (многие моды и библиотеки используют его)
+    //compileOnly("org.apache.logging.log4j:log4j-slf4j2-impl:$log4jVersion")
+
+
     compileOnly(prismLib("com/mojang/minecraft/26.1.1/minecraft-26.1.1-client.jar"))
     compileOnly(prismLib("com/mojang/brigadier/1.3.10/brigadier-1.3.10.jar"))
     compileOnly(prismLib("org/jspecify/jspecify/1.0.0/jspecify-1.0.0.jar"))

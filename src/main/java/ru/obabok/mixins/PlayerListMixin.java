@@ -16,9 +16,6 @@ import ru.obabok.models.Server;
 public class PlayerListMixin {
     @Inject(method = "placeNewPlayer", at = @At("TAIL"))
     private void placeNewPlayer(Connection connection, ServerPlayer player, CommonListenerCookie cookie, CallbackInfo ci){
-        ru.obabok.models.ServerPlayer serverPlayer = new ru.obabok.models.ServerPlayer(player);
-        Server server = new Server();
-        PlayerJoinEvent event = new PlayerJoinEvent(serverPlayer, server);
-        EventManager.post(event);
+
     }
 }

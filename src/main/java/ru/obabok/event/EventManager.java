@@ -2,6 +2,7 @@ package ru.obabok.event;
 
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.server.level.ServerLevel;
 import ru.obabok.Launcher;
 
@@ -11,8 +12,12 @@ public class EventManager {
         void onRender(GuiGraphicsExtractor graphics, DeltaTracker deltaTracker);
     }
     @FunctionalInterface
-    public interface WorldTickCallback {
+    public interface ServerWorldTickCallback {
         void onTick(ServerLevel serverLevel);
+    }
+    @FunctionalInterface
+    public interface ClientWorldTickCallback {
+        void onTick(ClientLevel clientLevel);
     }
 
 
@@ -29,14 +34,27 @@ public class EventManager {
             }
     );
 
-    public static final Event<WorldTickCallback> WORLD_TICK = new Event<>(
-            WorldTickCallback.class,
+    public static final Event<ServerWorldTickCallback> SERVER_WORLD_TICK = new Event<>(
+            ServerWorldTickCallback.class,
             (listeners) -> (serverLevel -> {
                 for (int i = 0; i < listeners.length; i++) {
                     try {
                         listeners[i].onTick(serverLevel);
                     } catch (Throwable e) {
-                        Launcher.LOGGER.error("[HUD] ", e);
+                        Launcher.LOGGER.error("[SERVER_WORLD_TICK] ", e);
+                    }
+                }
+            })
+    );
+
+    public static final Event<ClientWorldTickCallback> CLIENT_WORLD_TICK = new Event<>(
+            ClientWorldTickCallback.class,
+            (listeners) -> (clientLevel -> {
+                for (int i = 0; i < listeners.length; i++) {
+                    try {
+                        listeners[i].onTick(clientLevel);
+                    } catch (Throwable e) {
+                        Launcher.LOGGER.error("[CLIENT_WORLD_TICK] ", e);
                     }
                 }
             })

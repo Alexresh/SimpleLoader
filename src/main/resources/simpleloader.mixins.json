@@ -4,8 +4,10 @@
   "package": "ru.obabok.mixins",
   "compatibilityLevel": "JAVA_18",
   "mixins": [
+    "ClientLevelMixin",
     "GuiMixin",
     "MinecraftClientMixin",
+    "OptionsMixin",
     "PlayerListMixin",
     "PlayerMixin",
     "ServerLevelMixin",

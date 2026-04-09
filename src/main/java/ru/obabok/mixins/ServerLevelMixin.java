@@ -17,6 +17,6 @@ public abstract class ServerLevelMixin {
 
     @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/level/ServerLevel;updateSkyBrightness()V"))
     private void tick(BooleanSupplier haveTime, CallbackInfo ci){
-        EventManager.WORLD_TICK.invoker().onTick(getLevel());
+        EventManager.SERVER_WORLD_TICK.invoker().onTick(getLevel());
     }
 }
